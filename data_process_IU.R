@@ -24,10 +24,7 @@ read_files <- function(x) {
 df_all <-
   files %>%
   map_dfr(read_files) %>%
-  dplyr::select(-`<html>`) %>%
-  mutate(
-    ID_num = as.numeric(ID)
-  )
+  dplyr::select(-`<html>`) 
 
 ### note this data has more than just walking - can filter by
 write.csv(df_all, "df_all_IU.csv")
