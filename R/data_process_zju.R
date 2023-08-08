@@ -1,7 +1,7 @@
 library(purrr)
 library(tidyverse)
 library(here)
-
+data_dir = "data"
 
 # first download data after signing release agreement
 # http://com.ytzhang.net/zju-gaitacc/agreement.php
@@ -11,7 +11,7 @@ library(here)
 
 ## function to read in text files
 read_text <- function(x) {
-  read.table(x, sep = ",") %>%
+  xx = read.table(x, sep = ",") %>%
     t() %>%
     as.data.frame() %>%
     mutate(
@@ -19,25 +19,27 @@ read_text <- function(x) {
       session = sub("/subj.*", "", sub(".*gaitacc/", "", x)),
       record = sub(".txt.*", "", sub(".*rec_", "", x))
     )
+  rownames(xx) = NULL
+  xx
 }
 
 # get all files
 files <-
   c(
     list.files(
-      here("zju-gaitacc/session_0"),
-      recursive = T,
-      full.names = T
+      here(data_dir, "zju-gaitacc/session_0"),
+      recursive = TRUE,
+      full.names = TRUE
     ),
     list.files(
-      here("zju-gaitacc/session_1"),
-      recursive = T,
-      full.names = T
+      here(data_dir, "zju-gaitacc/session_1"),
+      recursive = TRUE,
+      full.names = TRUE
     ),
     list.files(
-      here("zju-gaitacc/session_2"),
-      recursive = T,
-      full.names = T
+      here(data_dir, "zju-gaitacc/session_2"),
+      recursive = TRUE,
+      full.names = TRUE
     )
   )
 
