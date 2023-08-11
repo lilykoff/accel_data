@@ -60,7 +60,7 @@ if (!all(file.exists(outfiles))) {
   # different from others
   df <-
     df %>%
-    mutate(
+    dplyr::mutate(
       session = as.integer(session),
       # first session is a distinct set of people
       id = ifelse(session > 0, sprintf("%03.0f", as.numeric(id) + 22),
@@ -68,11 +68,11 @@ if (!all(file.exists(outfiles))) {
     )
 
   df = df %>%
-    group_by(id, session, record, body_loc) %>%
-    mutate(
+    dplyr::group_by(id, session, record, body_loc) %>%
+    dplyr::mutate(
       row_index = 1:dplyr::n()
     ) %>%
-    ungroup()
+    dplyr::ungroup()
 
   loc_df = tibble::tribble(
     ~body_loc, ~body_location,
@@ -82,31 +82,30 @@ if (!all(file.exists(outfiles))) {
     "4", "lthigh",
     "5", "rankle"
   )
-  df = left_join(df, loc_df) %>%
-    select(-body_loc)
+  df = dplyr::left_join(df, loc_df) %>%
+    dplyr::select(-body_loc)
 
   # get the nmber of records for each id/session/recording
   lengths = df %>%
-    count(id, session, record, body_location)
+    dplyr::count(id, session, record, body_location)
 
   # ensure that each body location has the same length
   # we will use these in useful
   lengths = lengths %>%
-    group_by(id, session, record) %>%
-    summarise(
+    dplyr::group_by(id, session, record) %>%
+    dplyr::summarise(
       n = unique_it(n)
     ) %>%
-    ungroup()
+    dplyr::ungroup()
 
 
-  useful_key <- useful %>% map_dfr(read_useful)
+  useful_key <- useful %>% purrr::map_dfr(read_useful)
   # now we have df with start and end of useful segments for
   # each person, session, recording
 
   # get IDS to match with the data
-  useful_key <-
-    useful_key %>%
-    mutate(
+  useful_key <- useful_key %>%
+    dplyr::mutate(
       session = as.integer(session),
       # first session is a distinct set of people
       id = ifelse(session > 0, sprintf("%03.0f", as.numeric(id) + 22),
@@ -114,7 +113,7 @@ if (!all(file.exists(outfiles))) {
     )
 
   # get the length of each session recording
-  useful_key = left_join(useful_key, lengths)
+  useful_key = dplyr::left_join(useful_key, lengths)
 
   make_useful = function(start, stop, n) {
     x = rep(FALSE, length = n)
@@ -127,20 +126,19 @@ if (!all(file.exists(outfiles))) {
   }
 
   useful_df = useful_key %>%
-    group_by(id, session, record) %>%
-    summarise(
+    dplyr::group_by(id, session, record) %>%
+    dplyr::summarise(
       data = make_useful(start, stop, n)
     ) %>%
-    ungroup()
+    dplyr::ungroup()
 
   useful_df = tidyr::unnest(useful_df, data)
 
   # left join with original data
-  df <-
-    df %>%
-    left_join(useful_df)
+  df <- df %>%
+    dplyr::left_join(useful_df)
   df = df %>%  # 100 Hz data
-    mutate(time_seconds = (row_index - 1) / 100) %>%
+    dplyr::mutate(time_seconds = (row_index - 1) / 100) %>%
     dplyr::select(-row_index)
 
   if (!file.exists(gz_file)) {
@@ -160,9 +158,9 @@ if (!all(file.exists(outfiles))) {
 }
 
 df = df %>%
-  mutate(
+  dplyr::mutate(
     vm = sqrt(X^2 + Y^2 + Z^2))
 
 wide <- df %>%
-  select(-X, -Y, -Z) %>%
-  pivot_wider(names_from = body_location, values_from = vm)
+  dplyr::select(-X, -Y, -Z) %>%
+  tidyr::pivot_wider(names_from = body_location, values_from = vm)
