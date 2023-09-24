@@ -201,4 +201,3 @@ max(res)
 # min_amplitude step_frequency_min step_frequency_max min_duration_peak
 # <dbl>              <dbl>              <dbl>             <int>
 #   1           0.4                  1                2.9                 4
-
