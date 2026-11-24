@@ -3,7 +3,7 @@
 # https://zenodo.org/records/15861907?preview_file=CHF.zip
 
 
-required_packages = c("here", "purrr", "dplyr", "R.matlab", "downloader", "glue")
+required_packages = c("here", "purrr", "dplyr", "R.matlab", "downloader", "glue", "readr")
 
 install_and_load = function(packages) {
   for (package in packages) {
