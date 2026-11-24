@@ -26,8 +26,8 @@ force = FALSE
 options(timeout=10000)
 options(digits.secs = 3)
 dir.create(here::here("data/raw"), showWarnings = FALSE, recursive = TRUE)
-dir.create(here::here("data", "raw", "mob_d"))
-dir.create(here::here("data", "processed", "mob_d"), recursive = TRUE)
+dir.create(here::here("data", "raw", "mob_d"), showWarnings = FALSE)
+dir.create(here::here("data", "processed", "mob_d"), showWarnings = FALSE, recursive = TRUE)
 
 
 get_fold = function() {
