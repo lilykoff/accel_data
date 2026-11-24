@@ -1,7 +1,4 @@
-library(here)
-library(purrr)
-library(tidyverse)
-library(R.matlab)
+
 
 ## ---- wrist accelerometry + step annotations (laboratory and free-living) ----
 

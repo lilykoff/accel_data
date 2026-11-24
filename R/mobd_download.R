@@ -1,9 +1,19 @@
 ## mobilize D
+required_packages = c("here", "purrr", "dplyr", "R.matlab")
 
-library(here)
-library(purrr)
-library(tidyverse)
-library(R.matlab)
+install_and_load = function(package) {
+  if (!require(package, character.only = TRUE)) {
+    install.packages(package)
+    library(package, character.only = TRUE)
+  }
+}
+
+install_and_load(required_packages)
+
+# library(here)
+# library(purrr)
+# library(dplyr)
+# library(R.matlab)
 source(here::here("R", "mobd_utils.R"))
 force = FALSE
 
