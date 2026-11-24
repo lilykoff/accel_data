@@ -5,12 +5,13 @@ library(tidyverse)
 options(digits.secs = 2)
 # download raw data
 url = "https://archive.ics.uci.edu/static/public/319/mhealth+dataset.zip"
-downloader::download(url, dest="mhealth.zip", mode="wb")
-unzip("mhealth.zip", exdir = here::here("raw/"))
+dir.create(here::here("data/raw"), showWarnings = FALSE, recursive = TRUE)
+downloader::download(url, dest=here::here("data/raw/mhealth.zip"), mode="wb")
+unzip(here::here("data/raw/mhealth.zip"), exdir = here::here("data/raw/"))
 
 
 # process
-sub_files = list.files(here::here("raw/MHEALTHDATASET"), full.names = TRUE)
+sub_files = list.files(here::here("data/raw/MHEALTHDATASET"), full.names = TRUE)
 sub_files = sub_files[grepl("subject", sub_files)]
 
 mhealth_dat = map(
@@ -59,6 +60,7 @@ mhealth_dat_proc =
   mutate(across(c("X", "Y", "Z"), ~ .x *  0.10197162129779)) %>% # convert from m/s^2 to g
   select(X, Y, Z, tm_dttm, id_subject, id_study, cat_activity = cat_activity_clean)
 
-write_csv(mhealth_dat_proc, here::here("processed/mhealth.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(mhealth_dat_proc, here::here("data/processed/mhealth.csv.gz"))
 system("rm mhealth.zip")
 

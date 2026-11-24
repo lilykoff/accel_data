@@ -4,15 +4,16 @@ library(tidyverse)
 library(magrittr)
 
 options(digits.secs = 3)
-source(here::here("code/waveform_helpers.R"))
+source(here::here("R/waveform_helpers.R"))
 
 url = "https://physionet.org/static/published-projects/wrist/wrist-ppg-during-exercise-1.0.0.zip"
 
 options(timeout=300)
-downloader::download(url, dest="ppg.zip", mode="wb")
-unzip("ppg.zip", exdir = here::here("raw/"))
+dir.create(here::here("data/raw"), showWarnings = FALSE, recursive = TRUE)
+downloader::download(url, dest=here::here("data/raw/ppg.zip"), mode="wb")
+unzip(here::here("data/raw/ppg.zip"), exdir = here::here("data/raw/"))
 
-sub_files = list.files(here::here("raw/wrist-ppg-during-exercise-1.0.0"), full.names = TRUE)
+sub_files = list.files(here::here("data/raw/wrist-ppg-during-exercise-1.0.0"), full.names = TRUE)
 sub_files = sub_files[grepl("hea", sub_files)] # get header files
 
 ppg_dat = map(
@@ -50,7 +51,8 @@ ppg_dat_proc_low_noise <-
          id_study)
 
 
-write_csv(ppg_dat_proc_low_noise, here::here("processed/ppg_low_noise.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(ppg_dat_proc_low_noise, here::here("data/processed/ppg_low_noise.csv.gz"))
 
 ppg_dat_proc_wide_range <-
   ppg_dat %>%
@@ -72,7 +74,8 @@ ppg_dat_proc_wide_range <-
          tm_dttm,
          id_study)
 
-write_csv(ppg_dat_proc_wide_range, here::here("processed/ppg_wide_range.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(ppg_dat_proc_wide_range, here::here("data/processed/ppg_wide_range.csv.gz"))
 
 
 system("rm ppg.zip")

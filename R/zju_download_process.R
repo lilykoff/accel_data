@@ -9,8 +9,8 @@ options(digits.secs = 2)
 
 # more documentation here https://www.ytzhang.net/datasets/zju-gaitacc/
 
-data_dir  = "raw/zju_data/zju-gaitacc"
-out_dir = "/dcs05/ciprian/smart/accel_data/processed"
+data_dir  = "data/raw/zju_data/zju-gaitacc"
+out_dir = "data/processed"
 read_text = function(x) {
   id = sub(".*subj_(.*)/rec.*", "\\1", x)
   session = sub(".*session_(.*)/sub.*", "\\1", x)
@@ -262,4 +262,5 @@ df_proc = df_proc %>%
   select(X, Y, Z, tm_dttm, starts_with("id"), cat_activity, ind_cycle, id_recording = record) %>%
   select(-id)
 
+dir.create(here::here(out_dir), showWarnings = FALSE, recursive = TRUE)
 write_csv(df_proc, here::here(out_dir, "zju.csv.gz"))

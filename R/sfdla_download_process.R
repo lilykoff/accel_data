@@ -6,7 +6,7 @@ library(tidyverse)
 
 options(digits.secs = 2)
 # process
-sub_files = list.files(here::here("raw/simulated_falls_and_daily_living_activities_data_set/Tests"),
+sub_files = list.files(here::here("data/raw/simulated_falls_and_daily_living_activities_data_set/Tests"),
                        full.names = TRUE,
                        recursive = TRUE)
 sub_files = sub_files[-grep("Bilgi", sub_files)]
@@ -86,5 +86,6 @@ sfdla_proc =
          cat_activity = cat_activity_small)
 
 
-write_csv(sfdla_proc, here::here("processed/sfdla.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(sfdla_proc, here::here("data/processed/sfdla.csv.gz"))
 

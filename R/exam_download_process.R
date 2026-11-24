@@ -5,15 +5,16 @@ options(digits.secs = 3)
 options(timeout=300)
 # download raw data
 url = "https://physionet.org/static/published-projects/wearable-exam-stress/a-wearable-exam-stress-dataset-for-predicting-cognitive-performance-in-real-world-settings-1.0.0.zip"
-downloader::download(url, dest="exam.zip", mode="wb")
-unzip("exam.zip", exdir = here::here("raw/"))
+dir.create(here::here("data/raw"), showWarnings = FALSE, recursive = TRUE)
+downloader::download(url, dest=here::here("data/raw/exam.zip"), mode="wb")
+unzip(here::here("data/raw/exam.zip"), exdir = here::here("data/raw/"))
 
 
 # process
-unzip(here::here("raw/a-wearable-exam-stress-dataset-for-predicting-cognitive-performance-in-real-world-settings-1.0.0/Data.zip"),
-      exdir = here::here("raw/a-wearable-exam-stress-dataset-for-predicting-cognitive-performance-in-real-world-settings-1.0.0/"))
+unzip(here::here("data/raw/a-wearable-exam-stress-dataset-for-predicting-cognitive-performance-in-real-world-settings-1.0.0/Data.zip"),
+      exdir = here::here("data/raw/a-wearable-exam-stress-dataset-for-predicting-cognitive-performance-in-real-world-settings-1.0.0/"))
 
-sub_files = list.files(here::here("raw/a-wearable-exam-stress-dataset-for-predicting-cognitive-performance-in-real-world-settings-1.0.0/Data"),
+sub_files = list.files(here::here("data/raw/a-wearable-exam-stress-dataset-for-predicting-cognitive-performance-in-real-world-settings-1.0.0/Data"),
                        recursive = TRUE,
                        full.names = TRUE)
 acc_files = sub_files[grepl("ACC.csv", sub_files)]
@@ -56,6 +57,7 @@ exam_dat = map(
   bind_rows()
 
 
-write_csv(exam_dat, here::here("processed/exam.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(exam_dat, here::here("data/processed/exam.csv.gz"))
 system("rm exam.zip")
 

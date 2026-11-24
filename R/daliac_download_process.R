@@ -5,11 +5,12 @@ library(tidyverse)
 url = "https://faubox.rrze.uni-erlangen.de/dl/fiDdYhu9r5DDm1NbchkwS4/daliac.zip"
 options(timeout=300)
 options(digits.secs = 3)
-downloader::download(url, dest="dailac.zip", mode="wb")
-unzip("dailac.zip", exdir = here::here("raw/dailac"))
+dir.create(here::here("data/raw"), showWarnings = FALSE, recursive = TRUE)
+downloader::download(url, dest=here::here("data/raw/dailac.zip"), mode="wb")
+unzip(here::here("data/raw/dailac.zip"), exdir = here::here("data/raw/dailac"))
 
 
-sub_files <- list.files(here::here("raw/dailac"), recursive = TRUE, full.names = TRUE)
+sub_files <- list.files(here::here("data/raw/dailac"), recursive = TRUE, full.names = TRUE)
 acc_files <- sub_files[grep("dataset", sub_files)]
 
 
@@ -62,7 +63,8 @@ daliac_dat = map(
 ) %>%
   bind_rows()
 
-write_csv(daliac_dat, here::here("processed/daliac.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(daliac_dat, here::here("data/processed/daliac.csv.gz"))
 
 
 system("rm dailac.zip")

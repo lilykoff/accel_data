@@ -1,6 +1,6 @@
 options(digits.secs = 3)
 sample_rate = 15
-clemson = readr::read_csv("processed/clemson_ped.csv.gz")
+clemson = readr::read_csv("data/processed/clemson_ped.csv.gz")
 clemson %>%
   group_by(id_subject, cat_activity, id_study) %>%
   summarize(n = n()) %>%
@@ -18,7 +18,7 @@ clemson_samp <-
   select(-c(start, end)) %>%
   ungroup()
 
-iu = readr::read_csv("processed/iu.csv.gz")
+iu = readr::read_csv("data/processed/iu.csv.gz")
 sample_rate = 100
 iu %>%
   group_by(id_subject, cat_activity, id_study) %>%
@@ -36,7 +36,7 @@ iu_samp <-
   select(-c(start, end)) %>%
   ungroup()
 
-exam = readr::read_csv("processed/exam.csv.gz")
+exam = readr::read_csv("data/processed/exam.csv.gz")
 exam = exam %>% mutate(id_study = "exam")
 sample_rate = 32
 exam %>%
@@ -56,7 +56,7 @@ exam_samp <-
   ungroup()
 
 
-hmp = readr::read_csv("processed/hmp.csv.gz")
+hmp = readr::read_csv("data/processed/hmp.csv.gz")
 sample_rate = 32
 hmp %>%
   group_by(id_subject, cat_activity, id_study) %>%
@@ -76,7 +76,7 @@ hmp_samp <-
 
 
 
-mhealth = readr::read_csv("processed/mhealth.csv.gz")
+mhealth = readr::read_csv("data/processed/mhealth.csv.gz")
 mhealth = mhealth %>% mutate(id_subject = as.character(id_subject))
 sample_rate = 50
 mhealth %>%
@@ -96,7 +96,7 @@ mhealth_samp <-
   ungroup()
 
 
-ppg_l = readr::read_csv("processed/ppg_low_noise.csv.gz")
+ppg_l = readr::read_csv("data/processed/ppg_low_noise.csv.gz")
 sample_rate = 256
 ppg_l  %>%
   group_by(id_subject, cat_activity, id_study) %>%
@@ -114,7 +114,7 @@ ppg_l_samp <-
   select(-c(start, end)) %>%
   ungroup()
 
-ppg_w = readr::read_csv("processed/ppg_wide_range.csv.gz")
+ppg_w = readr::read_csv("data/processed/ppg_wide_range.csv.gz")
 sample_rate = 256
 ppg_w  %>%
   group_by(id_subject, cat_activity, id_study) %>%
@@ -133,7 +133,7 @@ ppg_w_samp <-
   ungroup()
 
 
-rw = readr::read_csv("processed/realworld.csv.gz")
+rw = readr::read_csv("data/processed/realworld.csv.gz")
 sample_rate = 50
 rw %>%
   group_by(id_subject, cat_activity, id_study) %>%
@@ -153,7 +153,7 @@ rw_samp <-
 
 
 
-sfdla = readr::read_csv("processed/sfdla.csv.gz")
+sfdla = readr::read_csv("data/processed/sfdla.csv.gz")
 sfdla = sfdla %>%
   mutate(id_repetition = as.character(id_repetition),
          id_subject = as.character(id_subject),
@@ -176,7 +176,7 @@ sfdla_samp <-
   ungroup()
 
 
-zju = readr::read_csv("processed/zju.csv.gz")
+zju = readr::read_csv("data/processed/zju.csv.gz")
 # zju = zju %>% mutate(id_session = as.character(id_session), id_recording = as.character(id_recording))
 
 sample_rate = 100

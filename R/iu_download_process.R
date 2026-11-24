@@ -9,7 +9,7 @@ url = paste0(
   "accelerometry-walk-climb-drive/",
   "labeled-raw-accelerometry-data-captured-during-walking-stair-climbing-and-driving-1.0.0.zip"
 )
-data_dir = "raw/IU_data"
+data_dir = "data/raw/IU_data"
 dir.create(data_dir, showWarnings = FALSE, recursive = TRUE)
 file = file.path(data_dir, basename(url))
 if (!file.exists(file)) {
@@ -19,7 +19,7 @@ fname = paste0(
   "labeled-raw-accelerometry-data-",
   "captured-during-walking-stair-climbing-",
   "and-driving-1.0.0.zip")
-data_dir = "raw/IU_data"
+data_dir = "data/raw/IU_data"
 file = file.path(data_dir, fname)
 
 # get the file list (without unzipping)
@@ -66,7 +66,7 @@ zip_file = paste0(
   "captured-during-walking-stair-climbing-",
   "and-driving-1.0.0.zip"
 )
-data_dir = "raw/IU_data"
+data_dir = "data/raw/IU_data"
 file = file.path(data_dir, basename(zip_file))
 
 # get the file list (without unzipping)
@@ -91,7 +91,7 @@ if (nrow(file_list) > 0) {
 }
 
 data_dir = file.path(
-  "raw/IU_data",
+  "data/raw/IU_data",
   paste0(
     "labeled-raw-accelerometry-data-",
     "captured-during-walking-stair-climbing-",
@@ -169,7 +169,7 @@ if (!all(file.exists(outfiles))) {
 }
 
 
-file = readr::read_csv("raw/IU_data/labeled-raw-accelerometry-data-captured-during-walking-stair-climbing-and-driving-1.0.0/raw_accelerometry_data.csv")
+file = readr::read_csv(here::here("data/raw/IU_data/labeled-raw-accelerometry-data-captured-during-walking-stair-climbing-and-driving-1.0.0/raw_accelerometry_data.csv"))
 start_time = lubridate::floor_date(as.POSIXct("2023-10-23 10:00:00", tz = "UTC"), unit = "seconds")
 options(digits.secs = 2)
 
@@ -194,6 +194,7 @@ file_proc <-
          id_subject = id,
          id_study)
 
-readr::write_csv(file_proc, here::here("processed/iu.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+readr::write_csv(file_proc, here::here("data/processed/iu.csv.gz"))
 
 

@@ -7,17 +7,17 @@ options(digits.secs = 3)
 # sign use agreement first
 
 
-sub_files = list.files(here::here("raw/MAREA_dataset/Subject Data_txt format"),
+sub_files = list.files(here::here("data/raw/MAREA_dataset/Subject Data_txt format"),
                        recursive = TRUE,
                        full.names = TRUE)
 sub_files = sub_files[grepl("Wrist", sub_files)]
 
-timings = list.files(here::here("raw/MAREA_dataset/Activity Timings"),
+timings = list.files(here::here("data/raw/MAREA_dataset/Activity Timings"),
                      recursive = TRUE,
                      full.names = TRUE)
 timings = timings[grepl(".txta", timings)]
 
-indoor = read_csv(here::here("raw/MAREA_dataset/Activity Timings/Indoor Experiment Timings.txt"),
+indoor = read_csv(here::here("data/raw/MAREA_dataset/Activity Timings/Indoor Experiment Timings.txt"),
                                            col_names = FALSE)
 colnames(indoor) = c("start_treadmill_walk",
                      "end_treadmill_walk",
@@ -35,7 +35,7 @@ indoor = indoor %>%
 indoor = indoor %>%
   pivot_longer(cols = -id_subject)
 
-outdoor = read_csv(here::here("raw/MAREA_dataset/Activity Timings/Outdoor Experiment Timings.txt"),
+outdoor = read_csv(here::here("data/raw/MAREA_dataset/Activity Timings/Outdoor Experiment Timings.txt"),
                   col_names = FALSE)
 colnames(outdoor) = c("start_outdoor_walk", "end_outdoor_walk",
                       "end_outdoor_run")
@@ -81,7 +81,7 @@ marea_dat_labeled = marea_dat %>%
 # RF_TO - Sample numbers of Toe-Off event from Right Foot FSR signal.
 
 # for our purposes, we want to count left foot heel strike or right foot heel strike
-mat_dat = R.matlab::readMat(here::here("raw/MAREA_dataset/GroundTruth.mat"))
+mat_dat = R.matlab::readMat(here::here("data/raw/MAREA_dataset/GroundTruth.mat"))
 
 # need to do this somewhat manually just bc of matlab nested structure
 # pull left and right foot heelstrike and indices (which are by activity)
@@ -163,6 +163,7 @@ final_dat =
          tm_time_s = time_s) %>%
   mutate(id_study = "marea")
 
-write_csv(final_dat, here::here("processed/marea.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(final_dat, here::here("data/processed/marea.csv.gz"))
 
 

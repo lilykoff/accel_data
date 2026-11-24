@@ -6,12 +6,13 @@ options(timeout=1000)
 options(digits.secs = 2)
 # download raw data
 url = "http://wifo5-14.informatik.uni-mannheim.de/sensor/dataset/realworld2016/realworld2016_dataset.zip"
-downloader::download(url, dest="realworld.zip", mode="wb")
-unzip("realworld.zip", exdir = here::here("raw/realworld2016_dataset"))
+dir.create(here::here("data/raw"), showWarnings = FALSE, recursive = TRUE)
+downloader::download(url, dest=here::here("data/raw/realworld.zip"), mode="wb")
+unzip(here::here("data/raw/realworld.zip"), exdir = here::here("data/raw/realworld2016_dataset"))
 
 
 
-sub_files = list.files(here::here("raw/realworld2016_dataset"),
+sub_files = list.files(here::here("data/raw/realworld2016_dataset"),
                        recursive = TRUE,
                        full.names = TRUE)
 sub_files = sub_files[grepl("acc\\_.*csv", sub_files)]
@@ -47,7 +48,7 @@ realworld_dat = map(
   bind_rows()
 
 # manually deal with annoying files
-sf = list.files(here::here("raw/realworld2016_dataset"),
+sf = list.files(here::here("data/raw/realworld2016_dataset"),
            recursive = TRUE,
            full.names = TRUE)
 sf = sf[grepl("acc\\_.*csv", sf)]
@@ -93,6 +94,7 @@ realworld_dat_proc <-
 
 
 
-write_csv(realworld_dat_proc, here::here("processed/realworld.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(realworld_dat_proc, here::here("data/processed/realworld.csv.gz"))
 system("rm realworld.zip")
 

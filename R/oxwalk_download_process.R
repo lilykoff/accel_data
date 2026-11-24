@@ -8,12 +8,13 @@ options(digits.secs = 3)
 url = "https://ora.ox.ac.uk/objects/uuid:19d3cb34-e2b3-4177-91b6-1bad0e0163e7/files/dcj82k7829"
 
 options(timeout=300)
-downloader::download(url, dest="oxwalk.zip", mode="wb")
-unzip("oxwalk.zip", exdir = here::here("raw/oxwalk"))
+dir.create(here::here("data/raw"), showWarnings = FALSE, recursive = TRUE)
+downloader::download(url, dest=here::here("data/raw/oxwalk.zip"), mode="wb")
+unzip(here::here("data/raw/oxwalk.zip"), exdir = here::here("data/raw/oxwalk"))
 
 
-wrist_files_100 = list.files(here::here("raw/oxwalk/OxWalk_Dec2022/Wrist_100Hz"), recursive = TRUE, full.names = TRUE)
-wrist_files_25 = list.files(here::here("raw/oxwalk/OxWalk_Dec2022/Wrist_25Hz"), recursive = TRUE, full.names = TRUE)
+wrist_files_100 = list.files(here::here("data/raw/oxwalk/OxWalk_Dec2022/Wrist_100Hz"), recursive = TRUE, full.names = TRUE)
+wrist_files_25 = list.files(here::here("data/raw/oxwalk/OxWalk_Dec2022/Wrist_25Hz"), recursive = TRUE, full.names = TRUE)
 
 
 
@@ -34,7 +35,8 @@ ox_data <- map(.x = c(wrist_files_100, wrist_files_25),
   bind_rows()
 
 
-write_csv(ox_data, here::here("processed/ox_data.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(ox_data, here::here("data/processed/ox_data.csv.gz"))
 
 system("rm oxwalk.zip")
 

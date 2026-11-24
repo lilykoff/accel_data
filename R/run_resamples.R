@@ -1,6 +1,7 @@
 library(tidyverse)
 library(purrr)
-source(here::here("code/resample_helpers.R"))
+source(here::here("R/resample_helpers.R"))
+dir.create(here::here("data/processed/resampled"), showWarnings = FALSE, recursive = TRUE)
 
 sample_rate_target = 15 # we want to resample all data to 15 Hz
 
@@ -8,7 +9,7 @@ sample_rate_target = 15 # we want to resample all data to 15 Hz
 
 # iu data
 options(digits.secs = 3)
-iu = readr::read_csv(here::here("processed/iu.csv.gz"))
+iu = readr::read_csv(here::here("data/processed/iu.csv.gz"))
 
 # get key df that is activity and subject labels for each second, which we will join back eventually
 key = iu %>%
@@ -43,11 +44,11 @@ iu_resampled =
   select(-second) %>%
   mutate(id_study = "iu")
 
-fname = paste0("processed/resampled/iu_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/iu_", sample_rate_target, "hz.csv.gz")
 readr::write_csv(iu_resampled, here::here(fname))
 
 # zju
-zju = readr::read_csv(here::here("processed/zju.csv.gz"))
+zju = readr::read_csv(here::here("data/processed/zju.csv.gz"))
 key = zju %>%
   mutate(second = floor_date(tm_dttm, unit = "seconds")) %>%
   group_by(id_subject, cat_activity, id_recording, second, id_session) %>%
@@ -86,11 +87,11 @@ zju_resampled =
   bind_rows() %>%
   select(-second) %>%
   mutate(id_study = "zju")
-fname = paste0("processed/resampled/zju_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/zju_", sample_rate_target, "hz.csv.gz")
 
 readr::write_csv(zju_resampled, here::here(fname))
 
-exam = readr::read_csv(here::here("processed/exam.csv.gz"))
+exam = readr::read_csv(here::here("data/processed/exam.csv.gz"))
 
 
 exam_list = split(exam, list(exam$id_subject, exam$cat_activity))
@@ -114,12 +115,12 @@ exam_resampled =
   select(-second) %>%
   mutate(id_study = "exam")
 
-fname = paste0("processed/resampled/exam_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/exam_", sample_rate_target, "hz.csv.gz")
 
 readr::write_csv(exam_resampled, here::here(fname))
 
 
-ppg = readr::read_csv(here::here("processed/ppg_low_noise.csv.gz"))
+ppg = readr::read_csv(here::here("data/processed/ppg_low_noise.csv.gz"))
 
 ppg = ppg %>% distinct()
 
@@ -148,11 +149,11 @@ ppg_resampled =
   mutate(id_study = "ppg_low_noise")
 
 
-fname = paste0("processed/resampled/ppg_low_noise_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/ppg_low_noise_", sample_rate_target, "hz.csv.gz")
 readr::write_csv(ppg_resampled, here::here(fname))
 
 
-ppg = readr::read_csv(here::here("processed/ppg_wide_range.csv.gz"))
+ppg = readr::read_csv(here::here("data/processed/ppg_wide_range.csv.gz"))
 
 ppg = ppg %>% distinct()
 
@@ -180,11 +181,11 @@ ppg_resampled =
   select(-second) %>%
   mutate(id_study = "ppg_wide_range")
 
-fname = paste0("processed/resampled/ppg_wide_range_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/ppg_wide_range_", sample_rate_target, "hz.csv.gz")
 readr::write_csv(ppg_resampled, here::here(fname))
 
 
-sfdla = readr::read_csv(here::here("processed/sfdla.csv.gz"),
+sfdla = readr::read_csv(here::here("data/processed/sfdla.csv.gz"),
                         col_types = cols(id_subject = col_character(),
                                          cat_activity_orig = col_character(),
                                          id_repetition  = col_character()))
@@ -220,11 +221,11 @@ sfdla_resampled =
   bind_rows() %>%
   select(-second) %>%
   mutate(id_study  = "sfdla")
-fname = paste0("processed/resampled/sfdla_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/sfdla_", sample_rate_target, "hz.csv.gz")
 readr::write_csv(sfdla_resampled, here::here(fname))
 
 
-realworld = readr::read_csv(here::here("processed/realworld.csv.gz"))
+realworld = readr::read_csv(here::here("data/processed/realworld.csv.gz"))
 
 realworld_list = split(realworld, list(realworld$id_subject,
                                realworld$cat_activity))
@@ -249,11 +250,11 @@ realworld_resampled =
   select(-second) %>%
   mutate(id_study = "realworld")
 
-fname = paste0("processed/resampled/realworld_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/realworld_", sample_rate_target, "hz.csv.gz")
 readr::write_csv(realworld_resampled, here::here(fname))
 
 
-hmp = readr::read_csv(here::here("processed/hmp.csv.gz"))
+hmp = readr::read_csv(here::here("data/processed/hmp.csv.gz"))
 
 hmp_list = split(hmp,
                  list(hmp$id_subject,
@@ -281,12 +282,12 @@ hmp_resampled =
   select(-second) %>%
   mutate(id_study = "hmp")
 
-fname = paste0("processed/resampled/hmp_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/hmp_", sample_rate_target, "hz.csv.gz")
 readr::write_csv(hmp_resampled, here::here(fname))
 
 
 
-mhealth = readr::read_csv(here::here("processed/mhealth.csv.gz"),
+mhealth = readr::read_csv(here::here("data/processed/mhealth.csv.gz"),
                           col_types = cols(id_subject = col_character()))
 
 mhealth_list = split(mhealth,
@@ -314,10 +315,10 @@ mhealth_resampled =
   select(-second) %>%
   mutate(id_study = "mhealth")
 
-fname = paste0("processed/resampled/mhealth_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/mhealth_", sample_rate_target, "hz.csv.gz")
 readr::write_csv(mhealth_resampled, here::here(fname))
 
-daliac = readr::read_csv(here::here("processed/daliac.csv.gz"),
+daliac = readr::read_csv(here::here("data/processed/daliac.csv.gz"),
                           col_types = cols(id_subject = col_character()))
 
 daliac_list = split(daliac,
@@ -345,10 +346,10 @@ daliac_resampled =
   select(-second) %>%
   mutate(id_study = "daliac")
 
-fname = paste0("processed/resampled/daliac_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/daliac_", sample_rate_target, "hz.csv.gz")
 readr::write_csv(daliac_resampled, here::here(fname))
 
-marea = readr::read_csv(here::here("processed/marea.csv.gz"))
+marea = readr::read_csv(here::here("data/processed/marea.csv.gz"))
 
 marea_list = split(marea,
                     list(marea$id_subject,
@@ -373,6 +374,6 @@ marea_resampled =
   bind_rows() %>%
   mutate(id_study = "marea")
 
-fname = paste0("processed/resampled/marea_", sample_rate_target, "hz.csv.gz")
+fname = paste0("data/processed/resampled/marea_", sample_rate_target, "hz.csv.gz")
 readr::write_csv(marea_resampled, here::here(fname))
 

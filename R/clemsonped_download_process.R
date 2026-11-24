@@ -6,11 +6,12 @@ url = "https://cecas.clemson.edu/tracking/Pedometer/Data.zip"
 
 options(timeout=300)
 options(digits.secs = 3)
-downloader::download(url, dest="clemsonped.zip", mode="wb")
-unzip("clemsonped.zip", exdir = here::here("raw/clemson"))
+dir.create(here::here("data/raw"), showWarnings = FALSE, recursive = TRUE)
+downloader::download(url, dest=here::here("data/raw/clemsonped.zip"), mode="wb")
+unzip(here::here("data/raw/clemsonped.zip"), exdir = here::here("data/raw/clemson"))
 
 
-ped_files <- list.files(here::here("raw/clemson"), recursive = TRUE, full.names = TRUE)
+ped_files <- list.files(here::here("data/raw/clemson"), recursive = TRUE, full.names = TRUE)
 acc_ped_files <- ped_files[-grep("steps.txt", ped_files)]
 step_files <- ped_files[grep("steps.txt", ped_files)]
 # 9 columns are wrist xyz, hip xyz and ankle xyz
@@ -76,8 +77,9 @@ ped_data_proc <-
          cat_activity,
          id_study)
 
-write_csv(ped_data_proc, here::here("processed/clemson_ped.csv"))
-R.utils::gzip("processed/clemson_ped.csv")
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(ped_data_proc, here::here("data/processed/clemson_ped.csv"))
+R.utils::gzip("data/processed/clemson_ped.csv")
 
 system("rm clemsonped.zip")
 

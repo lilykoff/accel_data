@@ -5,12 +5,13 @@ library(tidyverse)
 
 # download raw data
 url = "https://github.com/wchill/HMP_Dataset/archive/refs/heads/master.zip"
-downloader::download(url, dest="hmp.zip", mode="wb")
-unzip("hmp.zip", exdir = here::here("raw/"))
+dir.create(here::here("data/raw"), showWarnings = FALSE, recursive = TRUE)
+downloader::download(url, dest=here::here("data/raw/hmp.zip"), mode="wb")
+unzip(here::here("data/raw/hmp.zip"), exdir = here::here("data/raw/"))
 
 options(digits.secs = 3)
 # process
-sub_files = list.files(here::here("raw/HMP_Dataset-master"), full.names = TRUE, recursive = TRUE)
+sub_files = list.files(here::here("data/raw/HMP_Dataset-master"), full.names = TRUE, recursive = TRUE)
 sub_files = sub_files[grepl("Accelerometer", sub_files)]
 
 
@@ -56,6 +57,7 @@ hmp_dat_proc =
 
 hmp_dat_proc <- hmp_dat_proc %>% mutate(cat_activity = tolower(cat_activity))
 
-write_csv(hmp_dat_proc, here::here("processed/hmp.csv.gz"))
+dir.create(here::here("data/processed"), showWarnings = FALSE, recursive = TRUE)
+write_csv(hmp_dat_proc, here::here("data/processed/hmp.csv.gz"))
 
 system("rm hmp.zip")
