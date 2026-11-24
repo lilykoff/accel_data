@@ -1,5 +1,5 @@
 ## mobilize D
-required_packages = c("here", "purrr", "dplyr", "R.matlab")
+required_packages = c("here", "purrr", "dplyr", "R.matlab", "downloader", "glue")
 
 install_and_load = function(packages) {
   for (package in packages) {
