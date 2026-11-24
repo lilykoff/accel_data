@@ -4,6 +4,7 @@ library(here)
 library(purrr)
 library(tidyverse)
 library(R.matlab)
+source(here::here("R", "mobd_utils.R"))
 force = FALSE
 
 options(timeout=10000)
