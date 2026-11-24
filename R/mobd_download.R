@@ -1,9 +1,11 @@
 ## mobilize D
 required_packages = c("here", "purrr", "dplyr", "R.matlab")
 
-install_and_load = function(package) {
-  if (!require(package, character.only = TRUE)) {
-    install.packages(package)
+install_and_load = function(packages) {
+  for (package in packages) {
+    if (!requireNamespace(package, quietly = TRUE)) {
+      install.packages(package)
+    }
     library(package, character.only = TRUE)
   }
 }
