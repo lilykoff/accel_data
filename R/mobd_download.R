@@ -1,4 +1,8 @@
 ## mobilize D
+# https://www.nature.com/articles/s41597-023-01930-9#Sec1
+# https://zenodo.org/records/15861907?preview_file=CHF.zip
+
+
 required_packages = c("here", "purrr", "dplyr", "R.matlab", "downloader", "glue")
 
 install_and_load = function(packages) {
